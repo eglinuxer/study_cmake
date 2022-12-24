@@ -41,8 +41,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON )
 set(CMAKE_CXX_EXTENSIONS        OFF)
 
 # 如果编译器支持过程间优化（interprocedural optimization）则打开它
-include(CheckIPOSupported)
-check_ipo_supported(RESULT ipo_supported)
-if(ipo_supported)
-    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION True)
+if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
+    include(CheckIPOSupported)
+    check_ipo_supported(RESULT ipo_supported)
+    if(ipo_supported)
+        set(CMAKE_INTERPROCEDURAL_OPTIMIZATION True)
+    endif()
 endif()
+
+add_subdirectory(src)
