@@ -45,5 +45,22 @@
 
 ## 非超级构建
 
+- 参考顶级目录的 CMakeLists.txt
+
 ## IDE 项目
+
+```cmake
+# CMake 3.26 set USE_FOLDERS to YES default
+set_property(GLOBAL PROPERTY USE_FOLDERS YES)
+
+add_executable(Foo ...)
+add_executable(Bar ...)
+add_executable(test_Foo ...)
+add_executable(test_Bar ...)
+
+set_target_properties(Foo Bar PROPERTIES FOLDER "Main apps")
+set_target_properties(test_Foo test_Bar PROPERTIES FOLDER "Main apps/Tests")
+```
+
+- CMake 3.12 前，FOLDER 默认值为空，从 CMake 3.12 开始，从 CMAKE_FOLDER 取值
 

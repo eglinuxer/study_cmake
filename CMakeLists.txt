@@ -20,3 +20,19 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "AIX")
 else()
     message(STATUS "Configuring on/for ${CMAKE_SYSTEM_NAME}")
 endif()
+
+enable_testing()
+
+set(CMAKE_CXX_STANDARD          20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS        OFF)
+
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+include(dependencies.cmake)
+
+add_subdirectory(src)
+
+if(PROJECT_IS_TOP_LEVEL)
+    add_subdirectory(tests)
+    add_subdirectory(packaging)
+endif()
