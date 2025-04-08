@@ -20,6 +20,7 @@ if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
     message(FATAL_ERROR "In-source builds are not allowed")
 endif()
 
+include(GNUInstallDirs)
 include (TestBigEndian)
 test_big_endian(IS_BIG_ENDIAN)
 
