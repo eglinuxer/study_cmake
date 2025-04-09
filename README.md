@@ -1,10 +1,45 @@
 # study_cmake
 CMake 已经来到了 4.0 时代，让我们重学 CMake 吧！
 
-## 如何学习
+## 开始使用 CMake
 
-第一阶段，我会上传一些我学习 CMake 时的读书笔记。
+在这个部分，主要展示一些常用的 cmake 命令。
 
-- 下面是我正在读的书籍
-    - 《Minimal CMake》
-        - 《Minimal CMake》 引导您一步步创建 CMake 项目。本书利用作者在游戏和引擎开发方面的独特专长，以引人入胜的实例说明如何使用 CMake 构建复杂的软件。各章循序渐进地介绍相关概念，每一章都是在上一章的基础上展开的。在本书的整个学习过程中，你将从一个简单的控制台应用程序一直学习到一个完整的窗口应用程序。本书将帮助你打下坚实的 CMake 基础，并将其运用到未来的项目中。您将学习如何集成现有的软件库以增强应用程序的功能，如何构建可重复使用的库与他人共享，以及如何同时管理多个平台的开发工作，包括 macOS、Windows 和 Linux。您还将了解 CMake 如何促进测试，以及如何打包您的应用程序以供发布。本书的目的不是让你对 CMake 一无所知。相反，它侧重于最相关、最重要的部分，这些部分将帮助您快速提高工作效率。在本书结束时，您将成为一名自信的 CMake 用户，并获得构建和共享自己的库和应用程序的技能和经验。
+### cmake
+
+- 配置和构建项目
+
+    ```bash
+    # 先进入项目顶级目录
+    cmake -S <source tree> -B <build tree>
+    cmake --build <build tree>
+    ```
+
+    - -S 指定源码目录
+    - -B 指定构建目录
+
+### ctest
+
+### cpack
+
+## CMake 基础语法
+
+- 一个最小项目所必须的三个命令
+
+    - 指定 CMake 最小版本
+        - [cmake_minimum_required()](https://cmake.org/cmake/help/latest/command/cmake_minimum_required.html)
+    - 定义项目
+        - [project()](https://cmake.org/cmake/help/latest/command/project.html)
+
+    - 定义目标
+        - [add_executable()](https://cmake.org/cmake/help/latest/command/add_executable.html)
+        - [add_library()](https://cmake.org/cmake/help/latest/command/add_library.html)
+        - [add_custom_target()](https://cmake.org/cmake/help/latest/command/add_custom_target.html)
+
+- [CMake 变量](<./readme/CMake 变量.md>)
+
+- [CMake 逻辑判断及循环](<./readme/CMake 逻辑判断及循环.md>)
+
+- [CMake 项目目录结构组织](<./readme/CMake 项目目录结构组织.md>)
+
+## CMake 进阶
