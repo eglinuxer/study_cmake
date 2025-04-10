@@ -10,7 +10,7 @@ project(study_cmake
 set(CMAKE_EXPORT_COMPILE_COMMANDS       ON)
 
 # cmake --log-context
-list(APPEND CMAKE_MESSAGE_CONTEXT "${CMAKE_PROJECT_NAME}")
+list(APPEND CMAKE_MESSAGE_CONTEXT "${PROJECT_NAME}")
 
 if(NOT PROJECT_IS_TOP_LEVEL)
     message(FATAL_ERROR "The ${CMAKE_PROJECT_NAME} project is intended to be a standalone, top-level project. Do not vendor this directory.")
