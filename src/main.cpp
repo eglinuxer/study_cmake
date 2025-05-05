@@ -1,7 +1,28 @@
 #include <iostream>
+#include <filesystem>
+#include <fstream>
+#include <vector>
+#include <nlohmann/json.hpp>
 
-int main(int argc, const char* argv[])
+#include "add.h"
+
+using json_t = nlohmann::json;
+
+int main()
 {
-    std::cout << "Hello All, welcome to study CMake 4.0 with eglinux." << std::endl;
-    std::cout << "Hello cpp " << __cplusplus << std::endl;
+    int a = 1;
+    int b = 2;
+
+    std::cout << study::add(a, b) << std::endl;
+
+    auto j = R"(
+    {
+        "happy": true,
+        "pi": 3.141
+    }
+    )"_json;
+
+    std::string s = j.dump();
+
+    std::cout << s << std::endl;
 }

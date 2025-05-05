@@ -1,65 +1,79 @@
-cmake_minimum_required(VERSION 4.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.26 FATAL_ERROR)
 
 project(study_cmake
-    VERSION         1.0.0
-    DESCRIPTION     "Study CMake 4.0"
-    HOMEPAGE_URL    "https://github.com/eglinuxer/study_cmake"
+    VERSION         0.0.1
+    DESCRIPTION     "Eglinux's cmake study repo"
+    HOMEPAGE_URL    "公众号: eglinux"
     LANGUAGES       CXX
 )
 
+list(APPEND CMAKE_MESSAGE_CONTEXT       "study_cmake")
+list(APPEND CMAKE_MODULE_PATH           "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS       ON)
+set(STUDY_CMAKE_TOP_SOURCE_DIR          ${CMAKE_CURRENT_SOURCE_DIR})
+set(STUDY_CMAKE_TOP_BINARY_DIR          ${CMAKE_CURRENT_BINARY_DIR})
 
-# cmake --log-context
-list(APPEND CMAKE_MESSAGE_CONTEXT "${PROJECT_NAME}")
-
-if(NOT PROJECT_IS_TOP_LEVEL)
-    message(FATAL_ERROR "The ${CMAKE_PROJECT_NAME} project is intended to be a standalone, top-level project. Do not vendor this directory.")
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR AND NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
+    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
 if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
-    message(FATAL_ERROR "In-source builds are not allowed")
+    message(FATAL_ERROR
+      "\n"
+      "In-source builds are not allowed.\n"
+      "Instead, provide a path to build tree like so:\n"
+      "cmake -S . -B <destination>\n"
+      "\n"
+      "To remove files you accidentally created execute:\n"
+      "please delete CMakeFiles and CMakeCache.txt\n"
+    )
+endif()
+
+set(CMAKE_CXX_STANDARD              20 )
+set(CMAKE_CXX_STANDARD_REQUIRED     ON )
+set(CMAKE_CXX_EXTENSIONS            OFF)
+set(CMAKE_CXX_VISIBILITY_PRESET     hidden)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN YES)
+set(CMAKE_INSTALL_RPATH             $ORIGIN $ORIGIN/../lib)
+set(CMAKE_INSTALL_PREFIX            "/usr/local")
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    message(STATUS "Configuring on/for Linux")
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    message(STATUS "Configuring on/for macOS")
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    message(STATUS "Configuring on/for Windows")
+else()
+    message(STATUS "Configuring on/for ${CMAKE_SYSTEM_NAME}")
+endif()
+
+include (TestBigEndian)
+test_big_endian(IS_BIG_ENDIAN)
+if(IS_BIG_ENDIAN)
+    message(STATUS "Configuring on/for BIG_ENDIAN")
+else()
+    message(STATUS "Configuring on/for LITTLE_ENDIAN")
 endif()
 
 include(GNUInstallDirs)
-include (TestBigEndian)
-test_big_endian(IS_BIG_ENDIAN)
+include(GenerateExportHeader)
 
-if(IS_BIG_ENDIAN)
-    message(STATUS "BIG_ENDIAN")
-else()
-    message(STATUS "LITTLE_ENDIAN")
-endif()
+include(BuildInfo)
+GenerateBuildInfo(${CMAKE_CURRENT_LIST_DIR}/study_cmake_build_info.h.in ${CMAKE_CURRENT_BINARY_DIR}/study_cmake_build_info.h)
 
-# Check if the current generator is a multi-configuration generator or not
-get_property(IsMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
-
-if(IsMultiConfig)
-    message(STATUS "Configuring for [${CMAKE_CONFIGURATION_TYPES}]")
-else()
-    set(AllowedBuildTypes Debug Release RelWithDebugInfo MinSizeRel)
-    set_property(
-        CACHE CMAKE_BUILD_TYPE
-        PROPERTY STRINGS "${AllowedBuildTypes}"
-    )
-
-    # if the build type is not set force it to debug
-    if(NOT CMAKE_BUILD_TYPE)
-        set(CMAKE_BUILD_TYPE Debug CACHE STRING "" FORCE)
-    elseif(NOT CMAKE_BUILD_TYPE IN_LIST AllowedBuildTypes)
-        message(FATAL_ERROR "Unknown build type: ${CMAKE_BUILD_TYPE}")
-    endif()
-endif()
-
-message(STATUS "Configuring on/for [${CMAKE_SYSTEM_NAME}]")
-message(STATUS "Current build type is [${CMAKE_BUILD_TYPE}]")
-
-set(CMAKE_CXX_STANDARD                  20)
-set(CMAKE_CXX_STANDARD_REQUIRED         ON)
-set(CMAKE_CXX_EXTENSIONS                OFF)
-
+add_subdirectory(external)
 add_subdirectory(src)
+add_subdirectory(examples)
 
-if(PROJECT_IS_TOP_LEVEL)
-    add_subdirectory(tests)
-    add_subdirectory(packaging)
+if(BUILD_TESTING AND PROJECT_IS_TOP_LEVEL)
+    add_subdirectory(test)
 endif()
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/study_cmake_build_info.h
+    DESTINATION
+        ${CMAKE_INSTALL_INCLUDEDIR}
+)
+
+add_subdirectory(packaging)

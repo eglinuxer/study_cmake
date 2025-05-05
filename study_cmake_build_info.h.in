@@ -1,0 +1,19 @@
+#ifndef __BUILD_INFO_H__
+#define __BUILD_INFO_H__
+
+#include <string>
+
+namespace study_cmake
+{
+
+struct StudyCmakeBuildInfo
+{
+    static inline const std::string GitBranch           = "@GIT_BRANCH@";
+    static inline const std::string CommitSHA           = "@COMMIT_SHA@";
+    static inline const std::string Timestamp           = "@TIMESTAMP@";
+    static inline const std::string StudyCmakeVersion   = "@PROJECT_VERSION@";
+};
+
+}   // !namespace study_cmake
+
+#endif  // !__BUILD_INFO_H__

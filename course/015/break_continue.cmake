@@ -1,0 +1,45 @@
+cmake_minimum_required(VERSION 3.26 FATAL_ERROR)
+
+foreach(outerVar IN ITEMS a b c)
+    unset(s)
+    foreach(innerVar IN ITEMS 1 2 3)
+        # Stop inner loop once string s gets long
+        list(APPEND s "${outerVar}${innerVar}")
+        string(LENGTH "${s}" length)
+        if(length GREATER 5)
+            # End the innerVar foreach loop early
+            break()
+        endif()
+        # Do no more processing if outerVar is "b"
+        if(outerVar STREQUAL "b")
+            # End current innerVar iteration and move on to next innerVar item
+            continue()
+        endif()
+        message("Processing ${outerVar}-${innerVar}")
+    endforeach()
+    message("Accumulated list: ${s}")
+endforeach()
+
+message(STATUS "--------------------------------------------")
+
+set(log "Value: ")
+set(values one two skipMe three stopHere four)
+set(didSkip FALSE)
+while(NOT values STREQUAL "")
+    list(POP_FRONT values next)
+    # Modifications to "log" will be discarded
+    block(PROPAGATE didSkip)
+        string(APPEND log "${next}")
+        if(next MATCHES "skip")
+            set(didSkip TRUE)
+            continue()
+        elseif(next MATCHES "stop")
+            break()
+        elseif(next MATCHES "t")
+            string(APPEND log ", has t")
+        endif()
+        message("${log}")
+    endblock()
+endwhile()
+message("Did skip: ${didSkip}")
+message("Remaining values: ${values}")
